@@ -137,12 +137,20 @@ function getParamEditor($path) {
 }
 function zipFolder($dir, $zip, $base='') {
     $files = scandir($dir);
-    foreach($files as $file) {
-        if ($file==='.' || $file==='..' || $file==='blog') continue;
-        $full = $dir.'/'.$file;
-        $rel = $base ? $base.'/'.$file : $file;
-        if(is_dir($full)) zipFolder($full, $zip, $rel);
-        else $zip->addFile($full, $rel);
+    $entries = [];
+    foreach ($files as $file) {
+        if ($file === '.' || $file === '..' || $file === 'blog') continue;
+        $entries[] = $file;
+    }
+    if ($base !== '') $zip->addEmptyDir($base); // keep directory even if empty
+    foreach ($entries as $file) {
+        $full = $dir . '/' . $file;
+        $rel  = $base ? $base . '/' . $file : $file;
+        if (is_dir($full)) {
+            zipFolder($full, $zip, $rel);
+        } else {
+            $zip->addFile($full, $rel);
+        }
     }
 }
 function getHistoryTimes($file) {
@@ -394,8 +402,8 @@ if (isset($_GET['api'])) {
 // -- ダウンロード処理（ファイル/フォルダ/全体バックアップ） --
 if (isset($_GET['download'])) {
     $f = $_GET['download'];
-    $full = __DIR__ . '/' . $f;
-    if (!is_file($full)) die('Not found');
+    $full = realpath(__DIR__ . '/' . $f);
+    if ($full === false || strpos($full, __DIR__) !== 0 || !is_file($full)) die('Not found');
     header('Content-Type: application/octet-stream');
     header('Content-Disposition: attachment; filename="'.basename($f).'"');
     readfile($full);
@@ -404,8 +412,8 @@ if (isset($_GET['download'])) {
 if (isset($_GET['download_dir'])) {
     $dir = $_GET['download_dir'];
     $zipname = date('Y.m.d_H.i.s') . '_' . preg_replace('/[^a-zA-Z0-9_]/','_',basename($dir)).'.zip';
-    $full = __DIR__ . '/' . $dir;
-    if (!is_dir($full)) die('Not found');
+    $full = realpath(__DIR__ . '/' . $dir);
+    if ($full === false || strpos($full, __DIR__) !== 0 || !is_dir($full)) die('Not found');
     $zip = new ZipArchive();
     $tmp = tempnam(sys_get_temp_dir(), 'zip');
     $zip->open($tmp, ZipArchive::CREATE|ZipArchive::OVERWRITE);
@@ -949,11 +957,11 @@ $tree     = getDirTree(__DIR__);
 $flatTree = flattenTree($tree);
 $now      = time();
 foreach ($flatTree as $node) {
-    $id         = htmlspecialchars($node['id']);
-    $parent     = $node['parentId'] ? htmlspecialchars($node['parentId']) : '';
+    $id         = htmlspecialchars($node['id'], ENT_QUOTES);
+    $parent     = $node['parentId'] ? htmlspecialchars($node['parentId'], ENT_QUOTES) : '';
     $type       = $node['type'];
-    $name       = htmlspecialchars($node['name']);
-    $path       = htmlspecialchars($node['path']);
+    $name       = htmlspecialchars($node['name'], ENT_QUOTES);
+    $path       = htmlspecialchars($node['path'], ENT_QUOTES);
     $pathJs     = htmlspecialchars(json_encode($node['path']), ENT_QUOTES);
     $nameJs     = htmlspecialchars(json_encode($node['name']), ENT_QUOTES);
     $level      = $node['level'];
@@ -964,7 +972,7 @@ foreach ($flatTree as $node) {
     $mtimeClass = $isNew ? 'mtime mtime-new' : 'mtime';
     $parentPath = dirname($node['path']);
     if ($parentPath === '.') $parentPath = '';
-    $parentPathEsc = htmlspecialchars($parentPath);
+    $parentPathEsc = htmlspecialchars($parentPath, ENT_QUOTES);
     $parentPathJs  = htmlspecialchars(json_encode($parentPath), ENT_QUOTES);
     echo "<tr class='{$type}' data-id='{$id}' data-path='{$path}' data-parent-path='{$parentPathEsc}' data-parent='{$parent}' data-name='{$name}' data-mtime='{$mtime}'>";
     echo "<td class='tree-filecell' style='padding-left:" . (22*$level) . "px;'>";
@@ -988,7 +996,7 @@ foreach ($flatTree as $node) {
     echo "</td>";
     $desc = $rolesData[$node['path']] ?? getDefaultRole($node['path']);
     if(mb_strlen($desc)>80) $desc = mb_substr($desc,0,80).'...';
-    echo "<td class='tree-rolecell' ondblclick=\"roleEditOpen({$pathJs},this)\" data-default=\"" . htmlspecialchars(getDefaultRole($node['path'])) . "\">" . $desc . "</td>";
+    echo "<td class='tree-rolecell' ondblclick=\"roleEditOpen({$pathJs},this)\" data-default=\"" . htmlspecialchars(getDefaultRole($node['path']), ENT_QUOTES) . "\">" . $desc . "</td>";
     echo "<td class='tree-paramcell'>" . getParamEditor($node['path']) . "</td>";
     echo "</tr>";
 }
