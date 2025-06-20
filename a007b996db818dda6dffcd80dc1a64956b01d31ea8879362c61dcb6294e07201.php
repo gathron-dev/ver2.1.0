@@ -361,7 +361,10 @@ if (isset($_GET['api'])) {
     if ($_GET['api'] === 'load') {
         $file = $_POST['file'] ?? '';
         $full = realpath($base . '/' . $file);
-        if ($full === false || strpos($full, $base) !== 0 || !is_file($full)) {
+        if ($full === false) {
+            $full = $base . '/' . ltrim($file, '/');
+        }
+        if (strpos($full, $base) !== 0 || !is_file($full)) {
             exit(json_encode(['status' => 'ng']));
         }
         $code = file_get_contents($full);
@@ -371,7 +374,10 @@ if (isset($_GET['api'])) {
         $file = $_POST['file'] ?? '';
         $code = $_POST['code'] ?? '';
         $full = realpath($base . '/' . $file);
-        if ($full === false || strpos($full, $base) !== 0 || !is_file($full)) {
+        if ($full === false) {
+            $full = $base . '/' . ltrim($file, '/');
+        }
+        if (strpos($full, $base) !== 0 || !is_file($full)) {
             exit(json_encode(['status' => 'ng']));
         }
         // バックアップ
