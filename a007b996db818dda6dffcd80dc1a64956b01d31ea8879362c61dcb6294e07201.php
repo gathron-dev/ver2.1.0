@@ -21,7 +21,7 @@ function getDirTree($dir, $base = '', $level = 0) {
     $files = scandir($dir);
     foreach ($files as $file) {
         if ($file === '.' || $file === '..') continue;
-        if ($file === 'history' || $file === 'blog') continue;
+        if ($file === 'blog') continue; // history は表示する
         $fullPath = $dir . '/' . $file;
         $relPath = ltrim($base . '/' . $file, '/');
         $mtime = getFileMtime($relPath);
@@ -137,12 +137,20 @@ function getParamEditor($path) {
 }
 function zipFolder($dir, $zip, $base='') {
     $files = scandir($dir);
-    foreach($files as $file) {
-        if ($file==='.' || $file==='..' || $file==='history' || $file==='blog') continue;
-        $full = $dir.'/'.$file;
-        $rel = $base ? $base.'/'.$file : $file;
-        if(is_dir($full)) zipFolder($full, $zip, $rel);
-        else $zip->addFile($full, $rel);
+    $entries = [];
+    foreach ($files as $file) {
+        if ($file === '.' || $file === '..' || $file === 'blog') continue;
+        $entries[] = $file;
+    }
+    if ($base !== '') $zip->addEmptyDir($base); // keep directory even if empty
+    foreach ($entries as $file) {
+        $full = $dir . '/' . $file;
+        $rel  = $base ? $base . '/' . $file : $file;
+        if (is_dir($full)) {
+            zipFolder($full, $zip, $rel);
+        } else {
+            $zip->addFile($full, $rel);
+        }
     }
 }
 function getHistoryTimes($file) {
@@ -352,16 +360,18 @@ if (isset($_GET['api'])) {
     $base = __DIR__;
     if ($_GET['api'] === 'load') {
         $file = $_POST['file'] ?? '';
-        if (!preg_match('/^[a-zA-Z0-9_\-\/\.]+$/', $file) || !is_file($base . '/' . $file)) {
+        $full = realpath($base . '/' . $file);
+        if ($full === false || strpos($full, $base) !== 0 || !is_file($full)) {
             exit(json_encode(['status' => 'ng']));
         }
-        $code = file_get_contents($base . '/' . $file);
+        $code = file_get_contents($full);
         exit(json_encode(['status' => 'ok', 'code' => $code]));
     }
     if ($_GET['api'] === 'save') {
         $file = $_POST['file'] ?? '';
         $code = $_POST['code'] ?? '';
-        if (!preg_match('/^[a-zA-Z0-9_\-\/\.]+$/', $file) || !is_file($base . '/' . $file)) {
+        $full = realpath($base . '/' . $file);
+        if ($full === false || strpos($full, $base) !== 0 || !is_file($full)) {
             exit(json_encode(['status' => 'ng']));
         }
         // バックアップ
@@ -373,10 +383,10 @@ if (isset($_GET['api'])) {
                 rename($hfile . "." . ($i-1) . ".bak", $src);
             }
         }
-        if (file_exists($base . '/' . $file)) {
-            file_put_contents($hfile . ".0.bak", file_get_contents($base . '/' . $file));
+        if (file_exists($full)) {
+            file_put_contents($hfile . ".0.bak", file_get_contents($full));
         }
-        file_put_contents($base . '/' . $file, $code);
+        file_put_contents($full, $code);
         clearstatcache();
         exit(json_encode(['status' => 'ok']));
     }
@@ -891,9 +901,10 @@ window.addEventListener('DOMContentLoaded',()=>{
             let path = this.parentNode.dataset.path, type=this.parentNode.classList.contains('dir')?'dir':'file';
             let menu = document.createElement('div');
             menu.className='context-menu';
+            const enc = encodeURIComponent(path);
             menu.innerHTML = (type==='file'
-                ? '<div class="context-menu-item" onclick="downloadFile(\''+path+'\')">Download File</div>'
-                : '<div class="context-menu-item" onclick="downloadDir(\''+path+'\')">Download Folder (zip)</div>'
+                ? '<div class="context-menu-item" onclick="downloadFile(\''+enc+'\')">Download File</div>'
+                : '<div class="context-menu-item" onclick="downloadDir(\''+enc+'\')">Download Folder (zip)</div>'
             );
             menu.style.left = e.pageX+'px';
             menu.style.top = e.pageY+'px';
@@ -907,8 +918,8 @@ window.addEventListener('DOMContentLoaded',()=>{
     });
     document.getElementById('backup-btn').onclick = ()=>window.location.href='?backup_all=1';
 });
-function downloadFile(path){ window.location.href='?download='+encodeURIComponent(path); closeContextMenu(); }
-function downloadDir(path){ window.location.href='?download_dir='+encodeURIComponent(path); closeContextMenu(); }
+function downloadFile(encPath){ window.location.href='?download='+encPath; closeContextMenu(); }
+function downloadDir(encPath){ window.location.href='?download_dir='+encPath; closeContextMenu(); }
 function closeContextMenu(){
     let m=document.getElementById('rightclick-menu'); if(m) m.remove();
 }
@@ -951,6 +962,8 @@ foreach ($flatTree as $node) {
     $type       = $node['type'];
     $name       = htmlspecialchars($node['name']);
     $path       = htmlspecialchars($node['path']);
+    $pathJs     = htmlspecialchars(json_encode($node['path']), ENT_QUOTES);
+    $nameJs     = htmlspecialchars(json_encode($node['name']), ENT_QUOTES);
     $level      = $node['level'];
     $mtime      = $node['mtime'];
     $mtimeStr   = $mtime ? formatMtime($mtime) : '';
@@ -959,29 +972,31 @@ foreach ($flatTree as $node) {
     $mtimeClass = $isNew ? 'mtime mtime-new' : 'mtime';
     $parentPath = dirname($node['path']);
     if ($parentPath === '.') $parentPath = '';
-    echo "<tr class='{$type}' data-id='{$id}' data-path='{$path}' data-parent-path='{$parentPath}' data-parent='{$parent}' data-name='{$name}' data-mtime='{$mtime}'>";
+    $parentPathEsc = htmlspecialchars($parentPath);
+    $parentPathJs  = htmlspecialchars(json_encode($parentPath), ENT_QUOTES);
+    echo "<tr class='{$type}' data-id='{$id}' data-path='{$path}' data-parent-path='{$parentPathEsc}' data-parent='{$parent}' data-name='{$name}' data-mtime='{$mtime}'>";
     echo "<td class='tree-filecell' style='padding-left:" . (22*$level) . "px;'>";
     echo "<span class='{$mtimeClass}'>{$mtimeStr}</span>";
     if ($type === 'dir') {
-        echo "<span class='dir {$nameClass}' onclick=\"toggleDir('{$id}','{$path}');event.stopPropagation();\">";
+        echo "<span class='dir {$nameClass}' onclick=\"toggleDir('{$id}',{$pathJs});event.stopPropagation();\">";
         echo "<span class='dir-toggle' id='toggle_{$id}' style='margin-right:4px;cursor:pointer;'>▶</span>";
         echo "📁 <span class='ellipsis' title='{$path}'>{$name}</span></span>";
     } else {
-        echo "<span class='file {$nameClass}' onclick=\"openEditorModal('{$path}','{$name}');event.stopPropagation();\">";
+        echo "<span class='file {$nameClass}' onclick=\"openEditorModal({$pathJs},{$nameJs});event.stopPropagation();\">";
         echo "📄 <span class='ellipsis' title='{$path}'>{$name}</span></span>";
     }
     echo "<span class='btn-fs-wrap'>";
-    echo "<button class='btn-fs' onclick=\"showFsModal('create','{$path}',null,'{$type}','{$parentPath}');event.stopPropagation();\">New</button>";
+    echo "<button class='btn-fs' onclick=\"showFsModal('create',{$pathJs},null,'{$type}',{$parentPathJs});event.stopPropagation();\">New</button>";
     if ($name !== '.' && $name !== '..') {
-        echo "<button class='btn-fs btn-fs-rename' onclick=\"showFsModal('rename','{$path}',null,'{$type}','{$parentPath}');event.stopPropagation();\">ReName</button>";
-        echo "<button class='btn-fs btn-fs-delete' onclick=\"showFsModal('delete','{$path}',null,'{$type}','{$parentPath}');event.stopPropagation();\">DEL</button>";
+        echo "<button class='btn-fs btn-fs-rename' onclick=\"showFsModal('rename',{$pathJs},null,'{$type}',{$parentPathJs});event.stopPropagation();\">ReName</button>";
+        echo "<button class='btn-fs btn-fs-delete' onclick=\"showFsModal('delete',{$pathJs},null,'{$type}',{$parentPathJs});event.stopPropagation();\">DEL</button>";
         echo "<input type='checkbox' class='btn-fs-checkbox del-multi-cb' value='{$path}' style='vertical-align:middle;'>";
     }
     echo "</span>";
     echo "</td>";
     $desc = $rolesData[$node['path']] ?? getDefaultRole($node['path']);
     if(mb_strlen($desc)>80) $desc = mb_substr($desc,0,80).'...';
-    echo "<td class='tree-rolecell' ondblclick=\"roleEditOpen('{$path}',this)\" data-default=\"" . htmlspecialchars(getDefaultRole($node['path'])) . "\">" . $desc . "</td>";
+    echo "<td class='tree-rolecell' ondblclick=\"roleEditOpen({$pathJs},this)\" data-default=\"" . htmlspecialchars(getDefaultRole($node['path'])) . "\">" . $desc . "</td>";
     echo "<td class='tree-paramcell'>" . getParamEditor($node['path']) . "</td>";
     echo "</tr>";
 }
