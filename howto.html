@@ -1,0 +1,478 @@
+<!doctype html>
+<html lang="en" data-bs-theme="auto">
+  <head><script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
+    <meta name="generator" content="Hugo 0.112.5">
+    <meta name="theme-color" content="#9183ff">
+    <title>Gathron! | How to</title>
+    <link rel="canonical" href="https://getbootstrap.com/docs/5.3/examples/carousel/">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <style>
+        .barlow-condensed-medium {
+        font-family: "Barlow Condensed", serif;
+        font-weight: 500;
+        font-style: normal;
+    }
+    .custom-button {
+        padding: 0 0 0px 0;
+        border-radius: 30px;
+        border: none;
+    }
+    .custom-button:hover {
+        background-color: none;
+    }
+    .custom-button2 {
+        padding: 7px 20px 5px 20px;
+        border-radius: 30px;
+        border: none;
+        background-color: #7e79ff;
+        color: #ffffff;
+    }
+    .custom-button3 {
+        padding: 5px 15px;
+        border-radius: 30px;
+        border: none;
+        background-color: #b58bfb;
+        color: #ffffff;
+        font-size: 14px;
+    }
+    .custom-button5 {
+        border: none;
+        background-color: transparent;
+        color: #fff;
+        font-size: 22px;
+    }
+    .url-text {
+        font-family: 'OCR-A Std', monospace;
+        font-size: 16px;
+        color: #555;
+    }
+    .room_id {
+        padding: 5px;
+        margin: 5px;
+        border: 1px solid #666;
+        border-radius: 5px;
+        font-size: 1.2rem;
+        color: #777777;
+        text-align: left;
+        width: 100%;
+        background-color: #ffffff;
+    }
+    .navbar-brand {
+        margin-bottom: -5px;
+    }
+        h1, div  {
+            color: #2c3e50;
+        }
+        h1 {
+            text-align: center;
+        }
+        p {
+            margin: 10px 0;
+        }
+        ul {
+            margin: 10px 0;
+            padding-left: 20px;
+        }
+
+      .bd-placeholder-img {
+        font-size: 1.125rem;
+        text-anchor: middle;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        user-select: none;
+      }
+
+      @media (min-width: 768px) {
+        .bd-placeholder-img-lg {
+          font-size: 3.5rem;
+        }
+      }
+
+      .b-example-divider {
+        width: 100%;
+        height: 3rem;
+        background-color: rgba(0, 0, 0, .1);
+        border: solid rgba(0, 0, 0, .15);
+        border-width: 1px 0;
+        box-shadow: inset 0 .5em 1.5em rgba(0, 0, 0, .1), inset 0 .125em .5em rgba(0, 0, 0, .15);
+      }
+
+      .b-example-vr {
+        flex-shrink: 0;
+        width: 1.5rem;
+        height: 100vh;
+      }
+
+      .bi {
+        vertical-align: -.125em;
+        fill: currentColor;
+      }
+
+      .nav-scroller {
+        position: relative;
+        z-index: 2;
+        height: 2.75rem;
+        overflow-y: hidden;
+      }
+
+      .nav-scroller .nav {
+        display: flex;
+        flex-wrap: nowrap;
+        padding-bottom: 1rem;
+        margin-top: -1px;
+        overflow-x: auto;
+        text-align: center;
+        white-space: nowrap;
+        -webkit-overflow-scrolling: touch;
+      }
+
+      .btn-bd-primary {
+        --bd-violet-bg: #712cf9;
+        --bd-violet-rgb: 112.520718, 44.062154, 249.437846;
+
+        --bs-btn-font-weight: 600;
+        --bs-btn-color: var(--bs-white);
+        --bs-btn-bg: var(--bd-violet-bg);
+        --bs-btn-border-color: var(--bd-violet-bg);
+        --bs-btn-hover-color: var(--bs-white);
+        --bs-btn-hover-bg: #6528e0;
+        --bs-btn-hover-border-color: #6528e0;
+        --bs-btn-focus-shadow-rgb: var(--bd-violet-rgb);
+        --bs-btn-active-color: var(--bs-btn-hover-color);
+        --bs-btn-active-bg: #5a23c8;
+        --bs-btn-active-border-color: #5a23c8;
+      }
+      .bd-mode-toggle {
+        z-index: 1500;
+      }
+              .barlow-condensed-medium {
+        font-family: "Barlow Condensed", serif;
+        font-weight: 500;
+        font-style: normal;
+    }
+    .custom-button {
+        padding: 0 0 0px 0;
+        border-radius: 30px;
+        border: none;
+    }
+    .custom-button:hover {
+        background-color: none;
+    }
+    .custom-button2 {
+        padding: 7px 20px 5px 20px;
+        border-radius: 30px;
+        border: none;
+        background-color: #7e79ff;
+        color: #ffffff;
+    }
+    .custom-button3 {
+        padding: 5px 15px;
+        border-radius: 30px;
+        border: none;
+        background-color: #b58bfb;
+        color: #ffffff;
+        font-size: 14px;
+    }
+    .custom-button5 {
+        border: none;
+        background-color: transparent;
+        color: #fff;
+        font-size: 22px;
+    }
+    .url-text {
+        font-family: 'OCR-A Std', monospace;
+        font-size: 16px;
+        color: #555;
+    }
+    .room_id {
+        padding: 5px;
+        margin: 5px;
+        border: 1px solid #666;
+        border-radius: 5px;
+        font-size: 1.2rem;
+        color: #777777;
+        text-align: left;
+        width: 100%;
+        background-color: #ffffff;
+    }
+    .navbar-brand {
+        margin-bottom: -5px;
+    }
+        h1, div  {
+            color: #2c3e50;
+        }
+        h1 {
+            text-align: center;
+        }
+        p {
+            margin: 10px 0;
+        }
+        ul {
+            margin: 10px 0;
+            padding-left: 20px;
+        }
+
+      .bd-placeholder-img {
+        font-size: 1.125rem;
+        text-anchor: middle;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        user-select: none;
+      }
+      
+.px-4.py-5.text-center {
+        margin-left: 0rem !important;
+}
+
+      @media (min-width: 768px) {
+        .bd-placeholder-img-lg {
+          font-size: 3.5rem;
+        }
+        
+        .px-4.py-5.text-center {
+        margin-left: 4.5rem !important;
+}
+
+      }
+      
+            @media (min-width: 1000px) {
+        .bd-placeholder-img-lg {
+          font-size: 3.5rem;
+        }
+
+.px-4.py-5.text-center {
+        margin-left: 11rem !important;
+}
+
+      }
+
+      .b-example-divider {
+        width: 100%;
+        height: 3rem;
+        background-color: rgba(0, 0, 0, .1);
+        border: solid rgba(0, 0, 0, .15);
+        border-width: 1px 0;
+        box-shadow: inset 0 .5em 1.5em rgba(0, 0, 0, .1), inset 0 .125em .5em rgba(0, 0, 0, .15);
+      }
+
+      .b-example-vr {
+        flex-shrink: 0;
+        width: 1.5rem;
+        height: 100vh;
+      }
+
+      .bi {
+        vertical-align: -.125em;
+        fill: currentColor;
+      }
+
+      .nav-scroller {
+        position: relative;
+        z-index: 2;
+        height: 2.75rem;
+        overflow-y: hidden;
+      }
+
+      .nav-scroller .nav {
+        display: flex;
+        flex-wrap: nowrap;
+        padding-bottom: 1rem;
+        margin-top: -1px;
+        overflow-x: auto;
+        text-align: center;
+        white-space: nowrap;
+        -webkit-overflow-scrolling: touch;
+      }
+
+      .btn-bd-primary {
+        --bd-violet-bg: #712cf9;
+        --bd-violet-rgb: 112.520718, 44.062154, 249.437846;
+
+        --bs-btn-font-weight: 600;
+        --bs-btn-color: var(--bs-white);
+        --bs-btn-bg: var(--bd-violet-bg);
+        --bs-btn-border-color: var(--bd-violet-bg);
+        --bs-btn-hover-color: var(--bs-white);
+        --bs-btn-hover-bg: #6528e0;
+        --bs-btn-hover-border-color: #6528e0;
+        --bs-btn-focus-shadow-rgb: var(--bd-violet-rgb);
+        --bs-btn-active-color: var(--bs-btn-hover-color);
+        --bs-btn-active-bg: #5a23c8;
+        --bs-btn-active-border-color: #5a23c8;
+      }
+      .bd-mode-toggle {
+        z-index: 1500;
+      }
+      .lead {
+          font-size: 1.1rem!important;
+      }
+      
+      .lh-1 {
+          line-height: 1.1!important;
+          margin-bottom: 1rem;
+          font-size: 1.8rem;
+      }
+      
+      .text-body-tertiary {
+    --bs-text-opacity: 1;
+    color: rgb(86 0 255 / 50%) !important;
+      }
+      .my-5 {
+    margin-top: 3rem !important;
+    margin-bottom: 5rem !important;
+      }
+      
+      .text-body-emphasis {
+    --bs-text-opacity: 1;
+    color: #FFF !important;
+    letter-spacing: -1px;
+      }
+      .btn-primary {
+    --bs-btn-color: #fff;
+    --bs-btn-bg: #7e79ff;
+    --bs-btn-border-color: #7e79ff;
+    --bs-btn-hover-color: #fff;
+    --bs-btn-hover-bg: #5f5bc9;
+    --bs-btn-hover-border-color: #5f5bc9;
+    --bs-btn-focus-shadow-rgb: 49, 132, 253;
+    --bs-btn-active-color: #fff;
+    --bs-btn-active-bg: #5f5bc9;
+    --bs-btn-active-border-color: #5f5bc9;
+    --bs-btn-active-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
+    --bs-btn-disabled-color: #fff;
+    --bs-btn-disabled-bg: #7e79ff;
+    --bs-btn-disabled-border-color: #7e79ff;
+      }
+    
+    hr.featurette-divider {
+        margin: 5rem 0;
+    }
+    
+    hr {
+        border-top: 1px solid;
+    }
+
+    </style>
+
+    
+    <!-- Custom styles for this template -->
+    <link href="carousel.css" rel="stylesheet">
+  </head>
+  <body style="text-align: center; font-size: 14px; padding-top: 0px!important;">
+    <!--Logo & Menubar-->
+    <nav class="navbar navbar-expand navbar-dark" aria-label="Second navbar example" style="background-color: #ffffff99;">
+      <div class="container-fluid">
+        <a class="navbar-brand" href="https://gathron.com">
+          <img src="/jp/img/gathron_logo.svg" width="120px" alt="gathron_logo">
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarsExample02" aria-controls="navbarsExample02" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <!--Share Button-->
+        <div class="collapse navbar-collapse" id="navbarsExample02">
+          <ul class="navbar-nav me-auto">
+            <li class="nav-item">
+          </ul>
+          <!--<a type="button" onclick="window.open('https://wa.me/?text=<?php echo urlencode($currentUrl); ?>', '_blank')">
+                    <img style="filter: contrast(0.3); padding-left:0px;" src="/en/img/square-whatsapp-brands.svg" height="25px" alt="copy">
+                </a>
+          <a type="button" onclick="window.open('https://twitter.com/intent/tweet?url=<5c9ed8aced3fb5feefc770db25f66b58 />&text=Shared a group chat 😁%0AEveryone’s waiting on Gathron! 🤪', '_blank')">
+            <img style="filter: contrast(0.3); padding-left:15px;" src="/en/img/square-x-twitter-brands.svg" height="25px" alt="copy">
+          </a>
+          <a type="button" onclick="window.open('sms:?body=<936738501e12dec98164f305c4aa985a />')">
+            <img style="filter: contrast(0.3); padding-left:15px;" src="/en/img/comment-sms-solid.svg" height="25px" alt="copy">
+          </a>
+          <span style="padding-right:5px;padding-left:13px;">|</span>-->
+          <!--Info Button-->
+          <a href="terms.html"><img style="filter: contrast(0.3); padding-left:10px;" src="/en/img/file-lines-regular.svg" height="23px" alt="copy"></a>
+          <a href="howto.html"><img style="filter: contrast(0.3); padding-left:15px;" src="/en/img/circle-info-solid.svg" height="25px" alt="copy"></a>
+        </div>
+      </div>
+    </nav>
+    <div style="background-image: url(https://gathron.com/en/img/howto_image6.jpg);
+    height: 100%;
+    width: 100%;
+    object-fit: none;
+    background-size: cover;
+    background-position: top;
+    margin-top: 0px!important;">
+
+    <div class="px-4 py-5 text-center" style="margin-top: 0px!important;">
+      <!--<img src="/en/img/gathron_logo.svg" alt="gathron_logo" style="max-width: 230px; margin-bottom: 20px;">-->
+      <h1 class="display-2 fw-bold text-body-emphasis" style="font-weight: 400 !important; filter: drop-shadow(0px 0px 7px #000); text-align: left;">Ephemeral<br>group chat,<br>Gathron!</h1>
+      <div class="col-lg-6" style="text-align: left;">
+        <p class="lead mb-4" style="font-size: 1.1rem !important;
+    color: #ffffff;
+    filter: drop-shadow(0px 0px 4px #000);
+    line-height: 1.6rem; font-weight: 500;">No annoying installs or signups. Totally free.<br>Let’s jump into a group chat now!</p>
+        <div class="d-grid gap-2 d-sm-flex">
+        <a type="button" class="btn btn-primary btn-lg px-4 gap-3" style="filter: opacity(0.8);!important" href="https://gathron.com/en/">Start Group Chat</a>
+        <!--<button type="button" class="btn btn-outline-secondary btn-lg px-4">Secondary</button>-->
+      </div>
+      </div>
+    </div>
+    </div>
+
+    <div class="container marketing" style="margin-top: 5rem;">
+        
+    <!--left==================================================================-->
+    <div class="row featurette">
+        <h2 class="fw-normal lh-1">15-minute group chats only!<br><span class="text-body-tertiary">Quick and easy to wrap up.</span></h2>
+        <p class="lead">Ever felt like a convo is dragging on? Gathron keeps things snappy with a time limit!</p>
+    </div>
+
+    <!--right==================================================================-->
+    <hr class="featurette-divider">
+    <div class="row featurette">
+        <h2 class="fw-normal lh-1">No one will ever find out!<br><span class="text-body-tertiary">Privacy first, stress-free.</span></h2>
+        <p class="lead">With hashed URLs, no one can peek in unless you share the link. Private chats made easy!</p>
+    </div>
+
+    <!--left==================================================================-->
+    <hr class="featurette-divider">
+        <div class="row featurette">
+        <h2 class="fw-normal lh-1">No need to sign up!<br><span class="text-body-tertiary">Jump right in, hassle-free.</span></h2>
+        <p class="lead">Creating an ID and confirming email? Nah. With Gathron, it’s just one click and go!</p>
+    </div>
+    
+    <!--right==================================================================-->
+    <hr class="featurette-divider">
+    <div class="row featurette">
+        <h2 class="fw-normal lh-1">No one knows who’s who!<br><span class="text-body-tertiary">Built for peace of mind.</span></h2>
+        <p class="lead">Worried about what you said? Don’t be. Everyone’s anonymous — just Mr.A, Mr.B, and so on.</p>
+    </div>
+      
+    <!--left==================================================================-->
+    <hr class="featurette-divider">
+        <div class="row featurette">
+        <h2 class="fw-normal lh-1">Chats and pics vanish without a trace!<br><span class="text-body-tertiary">No strings attached.</span></h2>
+        <p class="lead">After 15 minutes, the chat shuts down automatically — everything’s wiped, so speak your mind!</p>
+    </div>
+
+    <!--right==================================================================-->
+    <hr class="featurette-divider">
+    <div class="row featurette">
+        <h2 class="fw-normal lh-1">Annoyed? End it instantly!<br><span class="text-body-tertiary">Total control is chill.</span></h2>
+        <p class="lead">If you're done chatting, just hit the end button. Everything disappears in a flash. It’s okay to be a little selfish sometimes!</p>
+    </div>
+    
+    <!--left==================================================================-->
+    <hr class="featurette-divider">
+        <div class="row featurette">
+        <h2 class="fw-normal lh-1">Install something? Nope!<br><span class="text-body-tertiary">Hop in instantly, no fuss.</span></h2>
+        <p class="lead">Downloading apps is a pain. Gathron runs in your browser — just send a link and you're good to go. Apps are old school!</p>
+    </div>
+    
+    <div class="container">
+      <footer class="py-3 my-4">
+        <p class="text-center text-body-secondary">&copy; 2025 Gathron</p>
+      </footer>
+    </div>
+  </body>
+</html>
