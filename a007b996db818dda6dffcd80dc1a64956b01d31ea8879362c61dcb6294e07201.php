@@ -137,12 +137,20 @@ function getParamEditor($path) {
 }
 function zipFolder($dir, $zip, $base='') {
     $files = scandir($dir);
-    foreach($files as $file) {
-        if ($file==='.' || $file==='..' || $file==='blog') continue;
-        $full = $dir.'/'.$file;
-        $rel = $base ? $base.'/'.$file : $file;
-        if(is_dir($full)) zipFolder($full, $zip, $rel);
-        else $zip->addFile($full, $rel);
+    $entries = [];
+    foreach ($files as $file) {
+        if ($file === '.' || $file === '..' || $file === 'blog') continue;
+        $entries[] = $file;
+    }
+    if ($base !== '') $zip->addEmptyDir($base); // keep directory even if empty
+    foreach ($entries as $file) {
+        $full = $dir . '/' . $file;
+        $rel  = $base ? $base . '/' . $file : $file;
+        if (is_dir($full)) {
+            zipFolder($full, $zip, $rel);
+        } else {
+            $zip->addFile($full, $rel);
+        }
     }
 }
 function getHistoryTimes($file) {
