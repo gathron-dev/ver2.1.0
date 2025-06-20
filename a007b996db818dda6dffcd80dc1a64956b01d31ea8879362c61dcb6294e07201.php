@@ -21,7 +21,7 @@ function getDirTree($dir, $base = '', $level = 0) {
     $files = scandir($dir);
     foreach ($files as $file) {
         if ($file === '.' || $file === '..') continue;
-        if ($file === 'history' || $file === 'blog') continue;
+        if ($file === 'blog') continue; // history は表示する
         $fullPath = $dir . '/' . $file;
         $relPath = ltrim($base . '/' . $file, '/');
         $mtime = getFileMtime($relPath);
@@ -954,8 +954,8 @@ foreach ($flatTree as $node) {
     $type       = $node['type'];
     $name       = htmlspecialchars($node['name']);
     $path       = htmlspecialchars($node['path']);
-    $pathJs     = json_encode($node['path']);
-    $nameJs     = json_encode($node['name']);
+    $pathJs     = htmlspecialchars(json_encode($node['path']), ENT_QUOTES);
+    $nameJs     = htmlspecialchars(json_encode($node['name']), ENT_QUOTES);
     $level      = $node['level'];
     $mtime      = $node['mtime'];
     $mtimeStr   = $mtime ? formatMtime($mtime) : '';
@@ -965,7 +965,7 @@ foreach ($flatTree as $node) {
     $parentPath = dirname($node['path']);
     if ($parentPath === '.') $parentPath = '';
     $parentPathEsc = htmlspecialchars($parentPath);
-    $parentPathJs  = json_encode($parentPath);
+    $parentPathJs  = htmlspecialchars(json_encode($parentPath), ENT_QUOTES);
     echo "<tr class='{$type}' data-id='{$id}' data-path='{$path}' data-parent-path='{$parentPathEsc}' data-parent='{$parent}' data-name='{$name}' data-mtime='{$mtime}'>";
     echo "<td class='tree-filecell' style='padding-left:" . (22*$level) . "px;'>";
     echo "<span class='{$mtimeClass}'>{$mtimeStr}</span>";
